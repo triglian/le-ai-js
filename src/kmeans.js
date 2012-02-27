@@ -78,8 +78,7 @@ Kmeans.prototype = {
     var numData = this.inputData.length;
     var K = this.centroids.length;
     var myCentroid = [];
-    //var centroidNodes = this.centroidNodes;
-   
+      
     //For each data point
     for(i = 0; i < numData; i++){
       var curMin = this.distance(this.inputData[i], this.centroids[0]);
