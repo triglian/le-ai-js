@@ -6,12 +6,20 @@ test("Sanity Checks", function() {
   raises(function(){new Kmeans(data)}, 'Given initialCentroids cannot be empty', "initialCentroids empty checking passed");  
   raises(function(){new Kmeans(data, [])}, 'Given initialCentroids cannot be empty', "initialCentroids empty checking 2 passed");
   raises(function(){new Kmeans(data, data, 'a')}, 'maxIters must be an integer > 0', "maxIters can't accept string");
+  raises(function(){new Kmeans(data, data)}, 'maxIters must be an integer > 0', "maxIters can't be empty");
   raises(function(){new Kmeans(data, data, 0)}, 'maxIters must be an integer > 0', "maxIters can't accept 0");
   raises(function(){new Kmeans(data, data, -2)}, 'maxIters must be an integer > 0', "maxIters can't accept negative numbers");
   raises(function(){new Kmeans(data, data, 2.1)}, 'maxIters must be an integer > 0', "maxIters can't accept floats");
 });
 
-test('findClosestCentroids()', function() {
+function roundNumber(number, digits) {
+     var multiple = Math.pow(10, digits);
+     var rndedNum = Math.round(number * multiple) / multiple;
+     return rndedNum;
+}
+
+
+test('kmeans helper functions', function() {
   var inputData = [
 [1.84208,  4.60757],
 [5.65858,  4.79996],
@@ -618,10 +626,24 @@ test('findClosestCentroids()', function() {
 ];
   var initialCentroids = [[3,3], [6, 2], [8, 5]];
   var maxIters = 100;
-   kmeans = new Kmeans(inputData, initialCentroids, maxIters);
-  /*kmeans.distance = function(x, y) {
-    return x[0];
-  }*/
- 
-  deepEqual(kmeans.findClosestCentroids(inputData, initialCentroids), expectedVal, 'findClosestCentroids returns the expected centroids');
+  kmeans = new Kmeans(inputData, initialCentroids, maxIters);
+  
+  var myCentroids = kmeans.findClosestCentroids();
+  deepEqual(myCentroids, expectedVal, 'findClosestCentroids returns the expected centroids');
+  
+   expectedVal = [
+   [2.4283, 3.1579],
+   [5.8135, 2.6337],
+   [7.1194, 3.6167],   
+  ];
+  var computedCentroids = kmeans.computeCentroids(inputData, myCentroids, 3);
+  //Round computedCentroids to 4 decimal places
+  var i,j;
+  for(i = 0; i < computedCentroids.length; i++) {
+    for(j = 0; j < computedCentroids[i].length; j++) {
+      computedCentroids[i][j] = roundNumber(computedCentroids[i][j], 4);
+    }
+  }
+  deepEqual(computedCentroids, expectedVal, 'computeCentroids returns the expected centroid positions');
+  
 });

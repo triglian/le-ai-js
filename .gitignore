@@ -4,5 +4,5 @@
 *.DS_Store
 *.swp
 *.out
-tempdata.txt
-testdata.txt
+tempdata*.txt
+testdata*.txt

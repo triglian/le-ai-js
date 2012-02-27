@@ -1,19 +1,25 @@
 /**
  * The Kmeans class computes centroids according to the k-means algorithm 
- * @param array_of_arrays inputData          The input data as an array of arrays
- * @param array initialCentroids   The initialCentroids
- * @param int maxIters           max iterations of kmeans
+ * @param array_of_arrays inputData The input data as an array of arrays
+ * @param array initialCentroids The initialCentroids
+ * @param int maxIters max iterations of kmeans
 */
 var Kmeans = function(inputData, initialCentroids, maxIters) {
   this.inputData = inputData || [];
   this.centroids = initialCentroids || [];
   this.maxIters = maxIters || 0;
+   
+  /**
+   * @var array_of_ints centroidNodes - lookup table for which nodes are members
+   * of the ith centroid
+   */
+  this.centroidNodes = [];
   
   /**
-   * @var array_of_ints myCentroid Represents the membership of inputData 
-   * to centroids
+   * @var array_of_ints myCentroids - lookup table to which centroid the 
+   * data point belongs
    */
-  this.myCentroid = [];
+  this.myCentroids = [];
   
   //Do some sanity checking
   if(this.inputData.length == 0) {
@@ -71,25 +77,80 @@ Kmeans.prototype = {
    * @return array with the index(referring to centroids) of
    * the closest centroid of the ith data point
   */ 
-  findClosestCentroids: function(inputData, centroids) {
+  findClosestCentroids: function() {
     var i, j;
-    var numData = inputData.length;
-    var K = centroids.length;
+    var numData = this.inputData.length;
+    var K = this.centroids.length;
     var myCentroid = [];
+    //var centroidNodes = this.centroidNodes;
+   
     //For each data point
     for(i = 0; i < numData; i++){
-      var curMin = this.distance(inputData[i], centroids[0]);
+      var curMin = this.distance(this.inputData[i], this.centroids[0]);
       myCentroid[i] = [0];
+      
       //For each centroid
       for(j = 1; j < K; j++) {
-	var curDist = this.distance(inputData[i], centroids[j]);	
+	var curDist = this.distance(this.inputData[i], this.centroids[j]);	
 	if(curDist < curMin) {
 	  curMin = curDist;
-	  myCentroid[i] = [j];
-	}
+	  myCentroid[i] = [j];	  
+	}	
+      }
+      //Update the lookup table for centroids to nodes
+      (this.centroidNodes[myCentroid[i]] === undefined) && (this.centroidNodes[myCentroid[i]] = []);
+      this.centroidNodes[myCentroid[i]].push(i);
+    }
+    this.myCentroids = myCentroid;
+    return myCentroid;
+  },
+  
+  /**
+   * Moves centroids to the average of the distance
+   * @param  array_of_arrays inputData
+   * @param array_of_arrays centroid mapping as returned by findClosestCentroids
+   * @param K the number of centroids
+   * @return array_of_arrays The centroids moved
+   */ 
+  computeCentroids: function(inputData, centroids, K) {
+    if(!centroids || centroids.length == 0 || !K) {
+      return [];
+    }
+    
+    var i, j, l;
+    var newCentroids = [];
+    //We consider the number of dimensions as the
+    //number of dimensions of the first centroid
+    var numDim = this.centroids[0].length;
+    
+    //init newCentroids to 0
+    for(i = 0; i < K; i++) {
+      for(j = 0; j < numDim; j++) {
+	(newCentroids[i] === undefined) && (newCentroids[i] = []);
+	newCentroids[i][j] = 0;
       }
     }
-    return myCentroid;
+         
+    //For each centroid
+    for(i = 0; i < K; i++) {
+      //Average the centroid members
+      var nodes = this.centroidNodes[i];
+      var numNodes = nodes.length;
+      for(j = 0; j < numNodes; j++) {
+	//Usage of side-effect beware
+	var curNode = inputData[nodes[j]];
+	for(l = 0; l < numDim; l++) {
+	  newCentroids[i][l] += curNode[l];
+	}
+      }
+      //Normalize
+      if(numNodes > 0) {
+        for(l = 0; l < numDim; l++) {
+	  newCentroids[i][l] /= numNodes;
+        }
+      }
+    }
+    return newCentroids;    
   }
 
 }
