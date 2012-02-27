@@ -70,10 +70,6 @@ Kmeans.prototype = {
 
   /**
    * Find closest centroid for each data point
-   * The function takes arguments instead of getting them from
-   * the class so that it can be overriden really easily
-   * @param array_of_arrays inputData The data points
-   * @param array_of_arrays centroids The centroids
    * @return array with the index(referring to centroids) of
    * the closest centroid of the ith data point
   */ 
@@ -107,13 +103,15 @@ Kmeans.prototype = {
   
   /**
    * Moves centroids to the average of the distance
-   * @param  array_of_arrays inputData
-   * @param array_of_arrays centroid mapping as returned by findClosestCentroids
-   * @param K the number of centroids
    * @return array_of_arrays The centroids moved
    */ 
-  computeCentroids: function(inputData, centroids, K) {
-    if(!centroids || centroids.length == 0 || !K) {
+  computeCentroids: function() {
+    K = this.centroids.length;
+    inputData = this.inputData;
+    /**
+     * TODO: The line below is subject to elimination
+     */
+    if(!this.centroids || this.centroids.length == 0 || !K) {
       return [];
     }
     

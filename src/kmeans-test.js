@@ -636,7 +636,7 @@ test('kmeans helper functions', function() {
    [5.8135, 2.6337],
    [7.1194, 3.6167],   
   ];
-  var computedCentroids = kmeans.computeCentroids(inputData, myCentroids, 3);
+  var computedCentroids = kmeans.computeCentroids();
   //Round computedCentroids to 4 decimal places
   var i,j;
   for(i = 0; i < computedCentroids.length; i++) {
