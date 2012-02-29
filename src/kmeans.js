@@ -44,6 +44,16 @@ function isInt(n) {
    return typeof n == 'number' && n % 1 == 0;
 }
 
+function AssertException(message) { this.message = message; }
+AssertException.prototype.toString = function () {
+  return 'AssertException: ' + this.message;
+}
+
+function assert(exp, message) {
+  if (!exp) {
+    throw new AssertException(message);
+  }
+}
 
 Kmeans.prototype = {
   
@@ -57,7 +67,11 @@ Kmeans.prototype = {
    * @return euclidean distance between x and y
   */
   distance: function(x, y) {
-    if(x.length != y.length) {
+    if(!x || x.length != y.length) {
+      console.log("x");
+      console.debug(x);
+      console.log("y");
+      console.debug(y);
       throw('Distance function accepts 2 parameters of identical dimension');
     }
     var sum = 0;
@@ -78,7 +92,7 @@ Kmeans.prototype = {
     var numData = this.inputData.length;
     var K = this.centroids.length;
     var myCentroid = [];
-      
+
     //For each data point
     for(i = 0; i < numData; i++){
       var curMin = this.distance(this.inputData[i], this.centroids[0]);
@@ -134,8 +148,8 @@ Kmeans.prototype = {
       var nodes = this.centroidNodes[i];
       var numNodes = nodes.length;
       for(j = 0; j < numNodes; j++) {
-	//Usage of side-effect beware
 	var curNode = inputData[nodes[j]];
+	
 	for(l = 0; l < numDim; l++) {
 	  newCentroids[i][l] += curNode[l];
 	}
@@ -147,7 +161,20 @@ Kmeans.prototype = {
         }
       }
     }
+    this.centroids = newCentroids;
     return newCentroids;    
+  },
+  
+  /**
+   * Runs k-means with the parameters taken by the constructor
+   */ 
+  run: function() {
+    var i;
+    for(i = 0; i < this.maxIters; i++) {
+      this.findClosestCentroids();
+      this.computeCentroids();
+    }
+    return this.centroids;
   }
 
 }

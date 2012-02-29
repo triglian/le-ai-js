@@ -18,6 +18,19 @@ function roundNumber(number, digits) {
      return rndedNum;
 }
 
+/**
+ * Round all numbers of a 2d array
+ * with precision of precision digits
+ */
+function round2d(array2d, precision) {
+  var i,j;
+  for(i = 0; i < array2d.length; i++) {
+    for(j = 0; j < array2d[i].length; j++) {
+      array2d[i][j] = roundNumber(array2d[i][j], precision);
+    }
+  }
+}
+
 
 test('kmeans helper functions', function() {
   var inputData = [
@@ -625,7 +638,7 @@ test('kmeans helper functions', function() {
 [0]
 ];
   var initialCentroids = [[3,3], [6, 2], [8, 5]];
-  var maxIters = 100;
+  var maxIters = 10;
   kmeans = new Kmeans(inputData, initialCentroids, maxIters);
   
   var myCentroids = kmeans.findClosestCentroids();
@@ -637,13 +650,29 @@ test('kmeans helper functions', function() {
    [7.1194, 3.6167],   
   ];
   var computedCentroids = kmeans.computeCentroids();
-  //Round computedCentroids to 4 decimal places
-  var i,j;
-  for(i = 0; i < computedCentroids.length; i++) {
-    for(j = 0; j < computedCentroids[i].length; j++) {
-      computedCentroids[i][j] = roundNumber(computedCentroids[i][j], 4);
-    }
-  }
+  round2d(computedCentroids, 4);
   deepEqual(computedCentroids, expectedVal, 'computeCentroids returns the expected centroid positions');
+  
+  expectedVal =[
+  [
+    2.1787,
+    3.5426
+  ],
+  [
+    4.6504,
+    1.9703
+  ],
+  [
+    6.4937,
+    3.0791
+  ]
+];
+  
+  //Reset kmeans
+//   console.log("--------------Full Kmeans--------------");
+   kmeans = new Kmeans(inputData, initialCentroids, maxIters);
+   var kmeansResult = kmeans.run();
+   round2d(kmeansResult, 4);
+   deepEqual(kmeansResult, expectedVal, 'kmeans result returns the expected result');
   
 });
