@@ -14,7 +14,8 @@ norY = cW/minMax.maxy;
 */
 
 function drawDataPoints(){
-    for (var i=0; i<inputData.length; i++){
+    var l = inputData.length
+    for (var i=0; i<l; i++){
         var myPoint = new Point(inputData[i][0]*norX, cH - (inputData[i][1] * norY));
         var myPath = new Path.Circle(myPoint, 2);
         myPath.fillColor = '#03689c';
@@ -27,6 +28,7 @@ function drawDataPoints(){
 */
 
 function drawCentroids(centroids){
+    var l = centroids.length
     for (var i=0; i<centroids.length; i++){
         var myPoint = new Point(centroids[i][0]*norX, cH - (centroids[i][1] * norY));
         centroidPaths[i].removeSegments();
