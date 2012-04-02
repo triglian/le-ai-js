@@ -184,7 +184,7 @@ Kmeans.prototype = {
     for(i = 0; i < this.maxIters; i++) {
       this.findClosestCentroids();
       this.computeCentroids();
-      this.onCentroidMove(this.centroids);
+      this.onCentroidMove(this.centroids, this.centroidNodes);
     }
     return this.centroids;
   }
