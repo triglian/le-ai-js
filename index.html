@@ -15,6 +15,7 @@
       }
     </style>
     <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -54,9 +55,29 @@
 
     <div class="container">
 
-      <h1>Welcome to the home of ai-js!</h1>
-      <p>Play with k-means …<br> … or explore more algorithms.</p>
-
+      <h1>le-ai-js - The Learning/Educational AI library</h1>
+      <p>ai-js aspires to be a full-featured Artificial Intelligence library, written purely in javascript.</p>
+      
+    <div class="row">
+        <div class="span7">
+             <canvas id="myCanvas" width='600px' height='400px' style="background:#F3F3F5" ></canvas>
+            <p><a href="#" class="btn btn-success" id='run-btn'>Run K-means</a>  iterations: <span id='info'></span>  </p>
+        </div>
+        <div class="span4">
+        <h3>K-means</h3>
+        <p>K-means is an heuristic algorithm for unsupervised learning, which aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean. This results into a partitioning of the data space into Voronoi cells.</p>
+        
+        <h3>Visualization</h3>
+        <p>In the visualization to the left, a dataset of 300 points is assigned three cluster centroids. When you press the button
+        'Start' the k-means algorithm will try to find three clusters of points and move the centroids to the center of the corresponding cluster.</p>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Using the  <a href="http://twitter.github.com/bootstrap/" target="_blank"> bootstrap</a> template.</p>
+        <p>Created by Vassilis Triglianos and Vassilis Papapanagiotou - <a href="http://www.ceid.upatras.gr/" target="_blank">Computer Engineering and Informatics Department</a>, University of Patras</p>
+        </footer>
     </div> <!-- /container -->
 
     <!-- Le javascript
@@ -64,5 +85,12 @@
     <!-- Placed at the end of the document so the pages load faster -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="src/visualizations/lib/paper.js"></script>
+    <script type="text/javascript" src="src/visualizations/js/kmeans-data.js" ></script>
+    <script type="text/javascript" src="src/kmeans/kmeans-instrumented.js" ></script>
+    <script type="text/paperscript" src="src/visualizations/js/kmeans-vis.js" canvas="myCanvas"></script>
+    <script type="text/javascript">
+
+    </script>
   </body>
 </html>
